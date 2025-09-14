@@ -1,0 +1,65 @@
+# Streaming Instagram Captioner Configuration
+
+# Model Configuration
+model:
+  path: "/home/frank/BrandInfluencerDatasetTraining/LFM2-VL-450M"
+  device: "cuda"  # cuda, cpu, auto
+  enable_warmup: true
+  max_batch_size: 1
+
+# Stream Processing
+stream:
+  target_fps: 10
+  frame_size: [640, 480]  # [width, height]
+  enable_preprocessing: true
+  max_queue_size: 10
+
+# Context Buffer
+context:
+  max_frames: 15
+  context_window_seconds: 30.0
+  update_interval: 2.0
+  min_context_frames: 3
+
+# Caption Generation
+caption:
+  default_style: "instagram"  # instagram, descriptive, minimal, trendy
+  update_interval: 3.0
+  max_length: 200
+  include_hashtags: true
+  include_emojis: true
+
+# Display Settings
+display:
+  caption_duration: 5.0  # seconds
+  show_status: true
+  show_controls: true
+  font_scale: 0.6
+  line_height: 25
+
+# Performance
+performance:
+  enable_tracking: true
+  max_history: 50
+  stats_update_interval: 1.0
+
+# Camera Settings
+camera:
+  default_index: 0
+  auto_exposure: true
+  auto_white_balance: true
+
+# File Stream Settings
+file_stream:
+  default_speed: 1.0
+  auto_restart: false
+  loop_video: false
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+  enable_file_logging: false
+  log_file: "streaming_captioner.log"
+
+

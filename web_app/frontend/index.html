@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Instagram Captioner</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎥 Streaming Instagram Captioner</h1>
+            <p>Real-time Instagram caption generation with LFM2-VL models</p>
+            <div class="status-indicators">
+                <div class="status-item">
+                    <span class="status-dot" id="model-status"></span>
+                    <span>Model Server</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot" id="camera-status"></span>
+                    <span>Camera</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot" id="connection-status"></span>
+                    <span>Connection</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Camera Section -->
+            <section class="camera-section">
+                <div class="camera-container">
+                    <video id="camera-video" autoplay muted playsinline></video>
+                    <canvas id="camera-canvas" style="display: none;"></canvas>
+                    <div class="camera-overlay">
+                        <div class="camera-controls">
+                            <button id="start-camera" class="btn btn-primary">Start Camera</button>
+                            <button id="stop-camera" class="btn btn-secondary" disabled>Stop Camera</button>
+                            <button id="capture-frame" class="btn btn-accent" disabled>Capture Frame</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls Section -->
+            <section class="controls-section">
+                <div class="control-group">
+                    <label for="caption-style">Caption Style:</label>
+                    <select id="caption-style" class="form-control">
+                        <option value="instagram">Instagram Style</option>
+                        <option value="trendy">Trendy Style</option>
+                        <option value="minimal">Minimal Style</option>
+                        <option value="descriptive">Descriptive Style</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="update-interval">Update Interval (seconds):</label>
+                    <input type="range" id="update-interval" min="1" max="10" value="3" class="slider">
+                    <span id="interval-value">3s</span>
+                </div>
+
+                <div class="control-group">
+                    <button id="generate-caption" class="btn btn-primary" disabled>Generate Caption</button>
+                    <button id="clear-context" class="btn btn-secondary">Clear Context</button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section">
+                <div class="result-card">
+                    <h3>📝 Current Caption</h3>
+                    <div id="current-caption" class="caption-display">
+                        No caption generated yet
+                    </div>
+                    <div class="caption-meta">
+                        <span id="caption-confidence">Confidence: --</span>
+                        <span id="caption-time">Time: --</span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <h3>🎬 Video Context</h3>
+                    <div id="video-context" class="context-display">
+                        No context available
+                    </div>
+                    <div class="context-meta">
+                        <span id="context-frames">Frames: 0</span>
+                        <span id="context-consistency">Consistency: --</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Caption History -->
+            <section class="history-section">
+                <h3>📚 Caption History</h3>
+                <div id="caption-history" class="history-list">
+                    <div class="history-item">No captions generated yet</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>Powered by LFM2-VL • Liquid AI • Real-time Vision-Language Processing</p>
+                <div class="footer-stats">
+                    <span id="total-captions">Captions: 0</span>
+                    <span id="total-frames">Frames: 0</span>
+                    <span id="uptime">Uptime: --</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Error</h3>
+            <p id="error-message"></p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+

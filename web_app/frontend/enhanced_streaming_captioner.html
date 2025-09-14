@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Streaming Instagram Captioner v4.0</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .camera-section {
+            margin-bottom: 20px;
+        }
+        #camera-video {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+        #camera-canvas {
+            display: none;
+        }
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        button.active {
+            background: #28a745;
+        }
+        .interval-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .interval-control input[type="range"] {
+            width: 200px;
+        }
+        .interval-control span {
+            font-weight: bold;
+            min-width: 60px;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+        .current-caption {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #2196f3;
+        }
+        .video-context {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .caption-history {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        .history-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 3px;
+            border-left: 3px solid #007bff;
+        }
+        .history-item .timestamp {
+            font-size: 0.8em;
+            color: #666;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .stat-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .context-frames {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .context-frame {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            text-align: center;
+            background: white;
+        }
+        .context-frame img {
+            width: 100%;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+        .context-frame .frame-info {
+            font-size: 0.7em;
+            color: #666;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Enhanced Streaming Instagram Captioner v4.0</h1>
+        <p>Real-time continuous caption generation with video context extraction using LFM2-VL models</p>
+        <p><small>Enhanced version with video context integration</small></p>
+        
+        <div id="status" class="status" style="display: none;">
+            <strong>Status:</strong> <span id="status-text">Checking...</span>
+        </div>
+        
+        <div class="camera-section">
+            <h3>📷 Camera Stream</h3>
+            <video id="camera-video" autoplay muted></video>
+            <canvas id="camera-canvas"></canvas>
+            
+            <div class="controls">
+                <button id="start-camera">Start Camera</button>
+                <button id="stop-camera" disabled>Stop Camera</button>
+                <button id="start-continuous" disabled>Start Enhanced Captioning</button>
+                <button id="stop-continuous" disabled>Stop Enhanced Captioning</button>
+                <button id="test-model">Test Model Server</button>
+                <button id="clear-context">Clear Video Context</button>
+            </div>
+            
+            <div class="interval-control">
+                <label for="interval-slider">Caption Interval:</label>
+                <input type="range" id="interval-slider" min="3" max="30" value="5">
+                <span id="interval-value">5s</span>
+                <small>(3-30 seconds)</small>
+            </div>
+        </div>
+        
+        <div class="video-context" id="video-context" style="display: none;">
+            <h3>🎬 Video Context (Last 10 frames):</h3>
+            <div class="context-frames" id="context-frames">
+                <p style="text-align: center; color: #666;">No context frames yet...</p>
+            </div>
+            <p><strong>Aggregated Context:</strong> <span id="aggregated-context">None</span></p>
+            <p><small>Frames: <span id="context-frame-count">0</span> | Consistency: <span id="context-consistency">--</span></small></p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="total-captions">0</div>
+                <div class="stat-label">Captions Generated</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="avg-time">0.0s</div>
+                <div class="stat-label">Avg Processing Time</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="uptime">0m 0s</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="current-interval">5s</div>
+                <div class="stat-label">Current Interval</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="context-frames-count">0</div>
+                <div class="stat-label">Context Frames</div>
+            </div>
+        </div>
+        
+        <div class="current-caption" id="current-caption" style="display: none;">
+            <h3>📝 Current Instagram Caption:</h3>
+            <p id="caption-text">No caption yet...</p>
+            <p><small>Last updated: <span id="last-updated">Never</span> | Processing time: <span id="processing-time">0.0s</span></small></p>
+        </div>
+        
+        <div class="loading" id="loading">
+            <p>🔄 Processing...</p>
+        </div>
+        
+        <div id="error-message" class="error" style="display: none;"></div>
+        
+        <div class="result" id="result" style="display: none;">
+            <h3>📚 Caption History:</h3>
+            <div class="caption-history" id="caption-history">
+                <p style="text-align: center; color: #666;">No captions generated yet...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class EnhancedStreamingCaptioner {
+            constructor() {
+                this.video = document.getElementById('camera-video');
+                this.canvas = document.getElementById('camera-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.stream = null;
+                this.isStreaming = false;
+                this.isContinuousMode = false;
+                this.intervalId = null;
+                this.captionCount = 0;
+                this.totalProcessingTime = 0;
+                this.startTime = Date.now();
+                
+                // Video context management
+                this.contextFrames = [];
+                this.maxContextFrames = 10;
+                this.contextFrameCount = 0;
+                
+                this.initializeElements();
+                this.initializeEventListeners();
+                this.checkModelServer();
+                this.startStatsUpdate();
+            }
+            
+            initializeElements() {
+                this.startCameraBtn = document.getElementById('start-camera');
+                this.stopCameraBtn = document.getElementById('stop-camera');
+                this.startContinuousBtn = document.getElementById('start-continuous');
+                this.stopContinuousBtn = document.getElementById('stop-continuous');
+                this.testModelBtn = document.getElementById('test-model');
+                this.clearContextBtn = document.getElementById('clear-context');
+                this.intervalSlider = document.getElementById('interval-slider');
+                this.intervalValue = document.getElementById('interval-value');
+                this.loading = document.getElementById('loading');
+                this.errorMessage = document.getElementById('error-message');
+                this.currentCaption = document.getElementById('current-caption');
+                this.captionText = document.getElementById('caption-text');
+                this.processingTime = document.getElementById('processing-time');
+                this.lastUpdated = document.getElementById('last-updated');
+                this.captionHistory = document.getElementById('caption-history');
+                this.status = document.getElementById('status');
+                this.statusText = document.getElementById('status-text');
+                
+                // Video context elements
+                this.videoContext = document.getElementById('video-context');
+                this.contextFramesDiv = document.getElementById('context-frames');
+                this.aggregatedContext = document.getElementById('aggregated-context');
+                this.contextFrameCountSpan = document.getElementById('context-frame-count');
+                this.contextConsistency = document.getElementById('context-consistency');
+                
+                // Stats elements
+                this.totalCaptionsSpan = document.getElementById('total-captions');
+                this.avgTimeSpan = document.getElementById('avg-time');
+                this.uptimeSpan = document.getElementById('uptime');
+                this.currentIntervalSpan = document.getElementById('current-interval');
+                this.contextFramesCountSpan = document.getElementById('context-frames-count');
+            }
+            
+            initializeEventListeners() {
+                this.startCameraBtn.addEventListener('click', () => this.startCamera());
+                this.stopCameraBtn.addEventListener('click', () => this.stopCamera());
+                this.startContinuousBtn.addEventListener('click', () => this.startContinuousCaptioning());
+                this.stopContinuousBtn.addEventListener('click', () => this.stopContinuousCaptioning());
+                this.testModelBtn.addEventListener('click', () => this.testModelServer());
+                this.clearContextBtn.addEventListener('click', () => this.clearVideoContext());
+                
+                this.intervalSlider.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    this.intervalValue.textContent = value + 's';
+                    this.currentIntervalSpan.textContent = value + 's';
+                    
+                    // If continuous mode is active, restart with new interval
+                    if (this.isContinuousMode) {
+                        this.stopContinuousCaptioning();
+                        setTimeout(() => this.startContinuousCaptioning(), 100);
+                    }
+                });
+            }
+            
+            async checkModelServer() {
+                try {
+                    this.showStatus('Checking model server...', 'info');
+                    const response = await fetch('http://localhost:8000/health', { timeout: 5000 });
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.showStatus(`Model server ready on ${data.device || 'unknown device'}`, 'success');
+                    } else {
+                        this.showStatus('Model server not responding', 'error');
+                    }
+                } catch (error) {
+                    this.showStatus('Model server not available - please start it first', 'error');
+                }
+            }
+            
+            async testModelServer() {
+                try {
+                    this.showLoading('Testing model server...');
+                    
+                    // Create a simple test image
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 224;
+                    canvas.height = 224;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = 'lightblue';
+                    ctx.fillRect(0, 0, 224, 224);
+                    ctx.fillStyle = 'white';
+                    ctx.font = '20px Arial';
+                    ctx.fillText('Test Image', 50, 120);
+                    
+                    const imageData = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    const response = await fetch('http://localhost:8000/generate_caption', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            image_data: imageData,
+                            context: "A simple test image",
+                            style: "instagram",
+                            prompt: "Create an Instagram-style caption for this image."
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.showStatus('Model server test successful!', 'success');
+                        this.addToHistory(data.instagram_caption || data.caption || 'Test successful', 0);
+                    } else {
+                        this.showStatus('Model server test failed', 'error');
+                    }
+                    
+                    this.hideLoading();
+                } catch (error) {
+                    this.showError('Model server test failed: ' + error.message);
+                    this.hideLoading();
+                }
+            }
+            
+            async startCamera() {
+                try {
+                    this.showLoading('Starting camera...');
+                    
+                    const constraints = {
+                        video: {
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            facingMode: 'user'
+                        }
+                    };
+                    
+                    this.stream = await navigator.mediaDevices.getUserMedia(constraints);
+                    this.video.srcObject = this.stream;
+                    
+                    this.video.onloadedmetadata = () => {
+                        this.canvas.width = this.video.videoWidth;
+                        this.canvas.height = this.video.videoHeight;
+                        this.isStreaming = true;
+                        this.startCameraBtn.disabled = true;
+                        this.stopCameraBtn.disabled = false;
+                        this.startContinuousBtn.disabled = false;
+                        this.hideLoading();
+                        this.showStatus('Camera started successfully', 'success');
+                    };
+                    
+                } catch (error) {
+                    console.error('Camera access failed:', error);
+                    this.showError('Camera access failed: ' + error.message);
+                    this.hideLoading();
+                }
+            }
+            
+            stopCamera() {
+                this.stopContinuousCaptioning();
+                
+                if (this.stream) {
+                    this.stream.getTracks().forEach(track => track.stop());
+                    this.stream = null;
+                }
+                
+                this.video.srcObject = null;
+                this.isStreaming = false;
+                this.startCameraBtn.disabled = false;
+                this.stopCameraBtn.disabled = true;
+                this.startContinuousBtn.disabled = true;
+                this.stopContinuousBtn.disabled = true;
+                this.showStatus('Camera stopped', 'info');
+            }
+            
+            startContinuousCaptioning() {
+                if (!this.isStreaming) {
+                    this.showError('Please start the camera first');
+                    return;
+                }
+                
+                this.isContinuousMode = true;
+                this.startContinuousBtn.disabled = true;
+                this.stopContinuousBtn.disabled = false;
+                this.startContinuousBtn.classList.add('active');
+                
+                const interval = parseInt(this.intervalSlider.value) * 1000;
+                this.intervalId = setInterval(() => {
+                    this.generateEnhancedCaption();
+                }, interval);
+                
+                this.showStatus(`Enhanced captioning started (every ${this.intervalSlider.value}s)`, 'success');
+            }
+            
+            stopContinuousCaptioning() {
+                this.isContinuousMode = false;
+                this.startContinuousBtn.disabled = false;
+                this.stopContinuousBtn.disabled = true;
+                this.startContinuousBtn.classList.remove('active');
+                
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+                
+                this.showStatus('Enhanced captioning stopped', 'info');
+            }
+            
+            async generateEnhancedCaption() {
+                if (!this.isStreaming) return;
+                
+                try {
+                    // Capture current frame
+                    this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+                    const currentImageData = this.canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    // Add current frame to context
+                    this.addFrameToContext(currentImageData);
+                    
+                    const startTime = Date.now();
+                    
+                    // Generate context from video frames
+                    const videoContext = await this.generateVideoContext();
+                    
+                    // Generate caption with video context
+                    const response = await fetch('http://localhost:8000/generate_caption', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            image_data: currentImageData,
+                            context: videoContext,
+                            style: "instagram",
+                            prompt: "Create an Instagram-style caption for this image using the video context."
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    const processingTime = (Date.now() - startTime) / 1000;
+                    
+                    // Update current caption
+                    const caption = data.instagram_caption || data.caption || 'No caption generated';
+                    this.captionText.textContent = caption;
+                    this.processingTime.textContent = processingTime.toFixed(2) + 's';
+                    this.lastUpdated.textContent = new Date().toLocaleTimeString();
+                    this.currentCaption.style.display = 'block';
+                    
+                    // Add to history
+                    this.addToHistory(caption, processingTime);
+                    
+                    // Update stats
+                    this.captionCount++;
+                    this.totalProcessingTime += processingTime;
+                    this.updateStats();
+                    
+                } catch (error) {
+                    console.error('Enhanced caption generation failed:', error);
+                    this.showError('Enhanced caption generation failed: ' + error.message);
+                }
+            }
+            
+            addFrameToContext(imageData) {
+                const frameInfo = {
+                    imageData: imageData,
+                    timestamp: Date.now(),
+                    description: null // Will be filled when we process the frame
+                };
+                
+                this.contextFrames.push(frameInfo);
+                
+                // Keep only last N frames
+                if (this.contextFrames.length > this.maxContextFrames) {
+                    this.contextFrames.shift();
+                }
+                
+                this.contextFrameCount++;
+                this.updateContextDisplay();
+            }
+            
+            async generateVideoContext() {
+                if (this.contextFrames.length === 0) {
+                    return "No video context available";
+                }
+                
+                try {
+                    // Process each frame to get descriptions
+                    const frameDescriptions = [];
+                    for (let i = 0; i < this.contextFrames.length; i++) {
+                        const frame = this.contextFrames[i];
+                        if (!frame.description) {
+                            // Generate description for this frame
+                            const response = await fetch('http://localhost:8000/generate_caption', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    image_data: frame.imageData,
+                                    context: "A video frame",
+                                    style: "descriptive",
+                                    prompt: "Describe this video frame in detail, focusing on visual elements, objects, and scene composition."
+                                })
+                            });
+                            
+                            if (response.ok) {
+                                const data = await response.json();
+                                frame.description = data.caption || data.instagram_caption || 'Frame description';
+                                frameDescriptions.push(frame.description);
+                            }
+                        } else {
+                            frameDescriptions.push(frame.description);
+                        }
+                    }
+                    
+                    // Aggregate descriptions into context
+                    const aggregatedContext = this.aggregateFrameDescriptions(frameDescriptions);
+                    this.aggregatedContext.textContent = aggregatedContext;
+                    
+                    return aggregatedContext;
+                    
+                } catch (error) {
+                    console.error('Error generating video context:', error);
+                    return "Error generating video context";
+                }
+            }
+            
+            aggregateFrameDescriptions(descriptions) {
+                if (descriptions.length === 0) return "No context available";
+                if (descriptions.length === 1) return descriptions[0];
+                
+                // Simple aggregation - combine descriptions
+                const uniqueDescriptions = [...new Set(descriptions)];
+                return `Video context from ${descriptions.length} frames: ${uniqueDescriptions.join('; ')}`;
+            }
+            
+            updateContextDisplay() {
+                this.contextFramesDiv.innerHTML = '';
+                
+                if (this.contextFrames.length === 0) {
+                    this.contextFramesDiv.innerHTML = '<p style="text-align: center; color: #666;">No context frames yet...</p>';
+                    this.videoContext.style.display = 'none';
+                    return;
+                }
+                
+                this.videoContext.style.display = 'block';
+                
+                this.contextFrames.forEach((frame, index) => {
+                    const frameDiv = document.createElement('div');
+                    frameDiv.className = 'context-frame';
+                    
+                    const img = document.createElement('img');
+                    img.src = frame.imageData;
+                    img.alt = `Frame ${index + 1}`;
+                    
+                    const info = document.createElement('div');
+                    info.className = 'frame-info';
+                    info.textContent = `Frame ${index + 1}`;
+                    
+                    frameDiv.appendChild(img);
+                    frameDiv.appendChild(info);
+                    this.contextFramesDiv.appendChild(frameDiv);
+                });
+                
+                this.contextFrameCountSpan.textContent = this.contextFrames.length;
+                this.contextFramesCountSpan.textContent = this.contextFrames.length;
+                
+                // Calculate consistency (simple metric)
+                const consistency = this.calculateContextConsistency();
+                this.contextConsistency.textContent = consistency.toFixed(2);
+            }
+            
+            calculateContextConsistency() {
+                if (this.contextFrames.length < 2) return 1.0;
+                
+                // Simple consistency based on frame count and time spread
+                const timeSpan = this.contextFrames[this.contextFrames.length - 1].timestamp - this.contextFrames[0].timestamp;
+                const expectedFrames = Math.max(1, timeSpan / (parseInt(this.intervalSlider.value) * 1000));
+                const actualFrames = this.contextFrames.length;
+                
+                return Math.min(1.0, actualFrames / expectedFrames);
+            }
+            
+            clearVideoContext() {
+                this.contextFrames = [];
+                this.contextFrameCount = 0;
+                this.updateContextDisplay();
+                this.showStatus('Video context cleared', 'info');
+            }
+            
+            addToHistory(captionText, processingTime) {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div>${captionText}</div>
+                    <div class="timestamp">${new Date().toLocaleTimeString()} (${processingTime.toFixed(2)}s)</div>
+                `;
+                
+                // Clear "no captions" message if it exists
+                const noCaptionsMsg = this.captionHistory.querySelector('p');
+                if (noCaptionsMsg) {
+                    noCaptionsMsg.remove();
+                }
+                
+                this.captionHistory.insertBefore(historyItem, this.captionHistory.firstChild);
+                
+                // Keep only last 20 items
+                const items = this.captionHistory.querySelectorAll('.history-item');
+                if (items.length > 20) {
+                    this.captionHistory.removeChild(items[items.length - 1]);
+                }
+                
+                // Show result section
+                this.result.style.display = 'block';
+            }
+            
+            updateStats() {
+                this.totalCaptionsSpan.textContent = this.captionCount;
+                
+                if (this.captionCount > 0) {
+                    const avgTime = this.totalProcessingTime / this.captionCount;
+                    this.avgTimeSpan.textContent = avgTime.toFixed(1) + 's';
+                }
+                
+                const uptime = Math.floor((Date.now() - this.startTime) / 1000);
+                const minutes = Math.floor(uptime / 60);
+                const seconds = uptime % 60;
+                this.uptimeSpan.textContent = `${minutes}m ${seconds}s`;
+            }
+            
+            startStatsUpdate() {
+                setInterval(() => {
+                    this.updateStats();
+                }, 1000);
+            }
+            
+            showLoading(message) {
+                this.loading.querySelector('p').textContent = message;
+                this.loading.style.display = 'block';
+            }
+            
+            hideLoading() {
+                this.loading.style.display = 'none';
+            }
+            
+            showError(message) {
+                this.errorMessage.textContent = message;
+                this.errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    this.errorMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            showStatus(message, type) {
+                this.statusText.textContent = message;
+                this.status.className = `status ${type}`;
+                this.status.style.display = 'block';
+            }
+        }
+        
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new EnhancedStreamingCaptioner();
+        });
+    </script>
+</body>
+</html>
