@@ -39,6 +39,15 @@ else:
     logging.warning(f"VideoContextImageCaptioning project not found at {video_context_path}")
     VIDEO_CONTEXT_AVAILABLE = False
 
+# Import base model service
+try:
+    from base_model_service import get_base_model_generator
+    BASE_MODEL_AVAILABLE = True
+    logging.info("Base model service loaded successfully")
+except ImportError as e:
+    logging.warning(f"Base model service not available: {e}")
+    BASE_MODEL_AVAILABLE = False
+
 import torch
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -69,6 +78,11 @@ class VideoContextRequest(BaseModel):
 
 class FrameAnalysisRequest(BaseModel):
     frames: List[str]  # List of base64 encoded images
+
+class BaseModelCaptionRequest(BaseModel):
+    image_data: str
+    style: str = "instagram"
+    max_tokens: int = 128
 
 class CaptionResponse(BaseModel):
     caption: str
@@ -131,9 +145,14 @@ def load_video_context_components():
         return False
     
     try:
-        model_path = "/home/frank/BrandInfluencerDatasetTraining/LFM2-VL-450M"
+        # Model configuration:
+        # Base model: LFM2-VL-450M (used for base model captions)
+        # Trained model: LFM2-VL-1.6B (used for context-aware inference)
+        model_path = "/home/frank/LiquidTraining/LFM2-VL-1.6B"
         
         logger.info("Initializing VideoContextImageCaptioning components...")
+        logger.info(f"Using trained model: {model_path}")
+        logger.info("Base model: LFM2-VL-450M (used for base model captions)")
         
         # Initialize individual components like in the pipeline
         video_processor = VideoProcessor(
@@ -412,6 +431,33 @@ async def generate_caption(request: CaptionRequest):
         
     except Exception as e:
         logger.error(f"Caption generation failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/generate_base_model_caption")
+async def generate_base_model_caption(request: BaseModelCaptionRequest):
+    """Generate caption using the base model (LFM2-VL-450M)"""
+    try:
+        if not BASE_MODEL_AVAILABLE:
+            raise HTTPException(status_code=503, detail="Base model not available")
+        
+        # Get base model generator
+        base_generator = get_base_model_generator()
+        
+        # Generate caption using base model
+        caption = base_generator.generate_caption_from_base64(
+            image_base64=request.image_data,
+            style=request.style,
+            max_tokens=request.max_tokens
+        )
+        
+        return {
+            "base_model_caption": caption,
+            "model": "LFM2-VL-450M",
+            "style": request.style
+        }
+        
+    except Exception as e:
+        logger.error(f"Error generating base model caption: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/generate_video_context_caption", response_model=VideoContextResponse)

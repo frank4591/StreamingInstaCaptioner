@@ -10,6 +10,10 @@ A real-time video context-aware Instagram caption generator that uses the VideoC
 - **Image Upload Support**: Upload images from your device
 - **Video Context Integration**: Use video context to enhance image captions
 - **Quality Metrics**: Track analysis quality and consistency scores
+- **Modern React UI**: Clean, responsive interface built with React + TypeScript
+- **Professional Design**: Modern card-based layout with smooth animations
+- **Real-time Stats**: Live metrics and performance tracking
+- **Mobile Responsive**: Works perfectly on desktop, tablet, and mobile devices
 
 ## 📋 Prerequisites
 
@@ -40,6 +44,7 @@ A real-time video context-aware Instagram caption generator that uses the VideoC
 
 ```bash
 cd /home/frank/StreamingInstagramCaptioner/web_app
+conda activate flockTest
 python model_server/video_context_server.py
 ```
 
@@ -51,14 +56,36 @@ INFO:     Uvicorn running on http://0.0.0.0:8000
 
 ### 2. Start the Web Frontend
 
-In a new terminal:
+**Option A: Modern React Frontend (Recommended)**
+
+**Quick Start (Automated):**
+```bash
+cd /home/frank/StreamingInstagramCaptioner/web_app
+chmod +x start_react_frontend.sh
+./start_react_frontend.sh
+```
+
+**Manual Start:**
+```bash
+# Terminal 1: Start backend
+cd /home/frank/StreamingInstagramCaptioner/web_app
+conda activate flockTest
+python model_server/video_context_server.py
+
+# Terminal 2: Start React frontend
+cd /home/frank/StreamingInstagramCaptioner/web_app/frontend-react
+npm install
+npm run dev
+```
+
+**Option B: Original HTML Frontend**
 
 ```bash
 cd /home/frank/StreamingInstagramCaptioner/web_app/frontend
 python -m http.server 3000
 ```
 
-The frontend will be available at `http://localhost:3000/smart_streaming_captioner.html`
+Both frontends will be available at `http://localhost:3000`
 
 ## 🎯 Usage Workflow
 
@@ -152,6 +179,20 @@ Check server logs for detailed error information:
 tail -f /path/to/server/logs
 ```
 
+## 🎨 Frontend Options
+
+### React Frontend (Recommended)
+- **Location**: `frontend-react/`
+- **Technology**: React 18 + TypeScript + Vite
+- **Features**: Modern UI, responsive design, real-time updates
+- **Start**: `npm run dev`
+
+### Original HTML Frontend
+- **Location**: `frontend/`
+- **Technology**: Vanilla HTML/CSS/JavaScript
+- **Features**: Simple, lightweight, no build process
+- **Start**: `python -m http.server 3000`
+
 ## 🔄 Development
 
 ### File Structure
@@ -160,8 +201,16 @@ tail -f /path/to/server/logs
 web_app/
 ├── model_server/
 │   └── video_context_server.py    # Main API server
-├── frontend/
-│   └── smart_streaming_captioner.html  # Web interface
+├── frontend-react/                # Modern React frontend
+│   ├── src/
+│   │   ├── components/            # React components
+│   │   ├── hooks/                 # Custom hooks
+│   │   ├── types/                 # TypeScript types
+│   │   ├── utils/                 # API service & utilities
+│   │   └── App.tsx                # Main app component
+│   └── package.json               # Dependencies
+├── frontend/                      # Original HTML frontend
+│   └── smart_streaming_captioner.html
 ├── backend/
 │   └── server.js                  # Node.js backend (alternative)
 └── README.md                      # This file
