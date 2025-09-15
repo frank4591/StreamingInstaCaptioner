@@ -1,5 +1,5 @@
-# 🔒 Privacy-Preserving Instagram Caption Generator
-## Federated Learning + Liquid AI + Real-time Context Integration
+# Caption-Aura: 🔒 Hyper Personlized Instagram Caption Generator
+## Federated Learning + Liquid AI +  RealTime Spatio-Temporal Context Integration
 
 A comprehensive system that generates personalized Instagram captions while preserving user privacy through federated learning, leveraging Liquid AI's continuous-time processing capabilities, and integrating real-time environmental context.
 
@@ -22,41 +22,6 @@ This project addresses the critical need for **privacy-preserving AI** in social
 
 ---
 
-## 🏗️ **System Architecture**
-
-```mermaid
-graph TB
-    subgraph "User Environment"
-        A[Webcam/Phone Camera] --> B[Real-time Video Stream]
-        B --> C[Frame Extraction]
-        C --> D[Context Analysis]
-    end
-    
-    subgraph "Federated Learning Network"
-        E[SoraEngine Network] --> F[Provisioning Tool]
-        F --> G[Trainer Node Configuration]
-        G --> H[Federated Training]
-        H --> I[Model Aggregation]
-        I --> J[Merged Model]
-    end
-    
-    subgraph "Liquid AI Processing"
-        K[LFM2-VL Base Model] --> L[Continuous-time Processing]
-        L --> M[Video Context Extraction]
-        M --> N[Personalized Caption Generation]
-    end
-    
-    subgraph "Privacy-Preserving Pipeline"
-        D --> O[Local Context Buffer]
-        O --> P[Context-Aware Captioning]
-        J --> P
-        P --> Q[Personalized Instagram Caption]
-    end
-    
-    A -.-> E
-    J -.-> K
-    O -.-> M
-```
 
 ---
 
@@ -70,26 +35,63 @@ sequenceDiagram
     participant T as Trainer Node
     participant A as Aggregator
     participant M as Merged Model
+    participant R as Real-time Inference
     
-    Note over U,M: Phase 1: Network Setup
+    Note over U,R: Phase 1: Network Setup
     U->>P: Request Configuration
     P->>S: Generate Node Credentials
     S->>T: Deploy Trainer Node
     T->>S: Join FL Network
     
-    Note over U,M: Phase 2: Federated Training
+    Note over U,R: Phase 2: Federated Training
     loop Training Rounds
         S->>T: Send Global Model Weights
-        T->>T: Train on Local Data
+        T->>T: Train on Local Instagram Data
         T->>A: Send Updated Weights
         A->>A: Aggregate Weights
         A->>S: Update Global Model
     end
     
-    Note over U,M: Phase 3: Model Deployment
-    A->>M: Create Merged Model
-    M->>U: Deploy for Inference
-    U->>U: Generate Personalized Captions
+    Note over U,R: Phase 3: Model Deployment
+    A->>M: Create Merged LFM2-VL Model
+    M->>R: Deploy for Real-time Inference
+    
+    Note over U,R: Phase 4: Real-time Caption Generation
+    U->>R: Capture Video Stream
+    R->>R: Extract Environmental Context
+    R->>R: Process with LFM2-VL Model
+    R->>U: Generate Personalized Instagram Caption
+```
+
+---
+
+## 🔄 **Complete Technical Flow**
+
+```mermaid
+flowchart TD
+    subgraph "Training Phase"
+        A1[Instagram Dataset] --> A2[Federated Learning Training]
+        A2 --> A3[LFM2-VL Model Weights]
+        A3 --> A4[Model Aggregation]
+        A4 --> A5[Merged LFM2-VL Model]
+    end
+    
+    subgraph "Real-time Inference Phase"
+        B1[Camera Input] --> B2[Video Frame Extraction]
+        B2 --> B3[Context Analysis]
+        B3 --> B4[Local Context Buffer]
+        
+        B5[Reference Image] --> B6[Image Processing]
+        
+        A5 --> B7[LFM2-VL Model Loading]
+        B4 --> B8[Context + Image Fusion]
+        B6 --> B8
+        B7 --> B8
+        B8 --> B9[Liquid AI Processing]
+        B9 --> B10[Personalized Instagram Caption]
+    end
+    
+    A5 -.-> B7
 ```
 
 ---
@@ -119,7 +121,7 @@ python provisioning_tool.py \
 ---
 
 ### 2. **LFM2 Federated Learning** 
-*`/home/frank/LiquidTraining/lfm2_federated_learning/`*
+*[lfm2_federated_learning](https://github.com/frank4591/LiquidTraining/tree/master/lfm2_federated_learning)*
 
 **Purpose**: Train LFM2-VL models using federated learning on Instagram datasets
 
@@ -155,7 +157,7 @@ python lfm2_instagram_fl_job_optimized.py \
 ---
 
 ### 3. **Video Context Image Captioning** 
-*`/home/frank/VideoContextImageCaptioning/`*
+*[frank4591/VideoContextCaptioner](hhttps://github.com/frank4591/VideoContextCaptioner)*
 
 **Purpose**: Extract temporal context from video frames to enhance image caption generation
 
@@ -184,7 +186,7 @@ graph LR
 ---
 
 ### 4. **Streaming Instagram Captioner** 
-*`/home/frank/StreamingInstagramCaptioner/`*
+*[frank4591/StreamingInstaCaptioner](hhttps://github.com/frank4591/StreamingInstaCaptioner)*
 
 **Purpose**: Real-time streaming application that captures environmental context and generates personalized captions
 

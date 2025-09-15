@@ -1,0 +1,239 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="502pt" height="1243pt" viewBox="0.00 0.00 502.00 1243.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1239)">
+<title>Architecture</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-1239 498,-1239 498,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_user</title>
+<path fill="none" stroke="lightgrey" d="M106,-807.4C106,-807.4 240,-807.4 240,-807.4 246,-807.4 252,-813.4 252,-819.4 252,-819.4 252,-1215 252,-1215 252,-1221 246,-1227 240,-1227 240,-1227 106,-1227 106,-1227 100,-1227 94,-1221 94,-1215 94,-1215 94,-819.4 94,-819.4 94,-813.4 100,-807.4 106,-807.4"/>
+<text xml:space="preserve" text-anchor="middle" x="173" y="-1212.2" font-family="Times,serif" font-size="12.00">User Environment</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_fed</title>
+<path fill="none" stroke="lightblue" d="M295,-478C295,-478 425,-478 425,-478 431,-478 437,-484 437,-490 437,-490 437,-1087.8 437,-1087.8 437,-1093.8 431,-1099.8 425,-1099.8 425,-1099.8 295,-1099.8 295,-1099.8 289,-1099.8 283,-1093.8 283,-1087.8 283,-1087.8 283,-490 283,-490 283,-484 289,-478 295,-478"/>
+<text xml:space="preserve" text-anchor="middle" x="360" y="-1085" font-family="Times,serif" font-size="12.00">Federated Learning Network</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_liquid</title>
+<path fill="none" stroke="lightyellow" d="M304,-8C304,-8 474,-8 474,-8 480,-8 486,-14 486,-20 486,-20 486,-413.2 486,-413.2 486,-419.2 480,-425.2 474,-425.2 474,-425.2 304,-425.2 304,-425.2 298,-425.2 292,-419.2 292,-413.2 292,-413.2 292,-20 292,-20 292,-14 298,-8 304,-8"/>
+<text xml:space="preserve" text-anchor="middle" x="389" y="-410.4" font-family="Times,serif" font-size="12.00">Liquid AI Processing</text>
+</g>
+<g id="clust4" class="cluster">
+<title>cluster_privacy</title>
+<path fill="none" stroke="lightgreen" d="M92,-226C92,-226 256,-226 256,-226 262,-226 268,-232 268,-238 268,-238 268,-540.4 268,-540.4 268,-546.4 262,-552.4 256,-552.4 256,-552.4 92,-552.4 92,-552.4 86,-552.4 80,-546.4 80,-540.4 80,-540.4 80,-238 80,-238 80,-232 86,-226 92,-226"/>
+<text xml:space="preserve" text-anchor="middle" x="174" y="-537.6" font-family="Times,serif" font-size="12.00">Privacy-Preserving Pipeline</text>
+</g>
+<!-- A -->
+<g id="node1" class="node">
+<title>A</title>
+<path fill="none" stroke="black" d="M232.28,-1196.6C232.28,-1196.6 113.72,-1196.6 113.72,-1196.6 107.72,-1196.6 101.72,-1190.6 101.72,-1184.6 101.72,-1184.6 101.72,-1172.6 101.72,-1172.6 101.72,-1166.6 107.72,-1160.6 113.72,-1160.6 113.72,-1160.6 232.28,-1160.6 232.28,-1160.6 238.28,-1160.6 244.28,-1166.6 244.28,-1172.6 244.28,-1172.6 244.28,-1184.6 244.28,-1184.6 244.28,-1190.6 238.28,-1196.6 232.28,-1196.6"/>
+<text xml:space="preserve" text-anchor="middle" x="173" y="-1175.3" font-family="Arial" font-size="11.00">Webcam / Phone Camera</text>
+</g>
+<!-- B -->
+<g id="node2" class="node">
+<title>B</title>
+<path fill="none" stroke="black" d="M224.38,-1069.4C224.38,-1069.4 115.62,-1069.4 115.62,-1069.4 109.62,-1069.4 103.62,-1063.4 103.62,-1057.4 103.62,-1057.4 103.62,-1045.4 103.62,-1045.4 103.62,-1039.4 109.62,-1033.4 115.62,-1033.4 115.62,-1033.4 224.38,-1033.4 224.38,-1033.4 230.38,-1033.4 236.38,-1039.4 236.38,-1045.4 236.38,-1045.4 236.38,-1057.4 236.38,-1057.4 236.38,-1063.4 230.38,-1069.4 224.38,-1069.4"/>
+<text xml:space="preserve" text-anchor="middle" x="170" y="-1048.1" font-family="Arial" font-size="11.00">Real-time Video Stream</text>
+</g>
+<!-- A&#45;&gt;B -->
+<g id="edge1" class="edge">
+<title>A-&gt;B</title>
+<path fill="none" stroke="black" d="M170,-1160.1C170,-1160.1 170,-1081.02 170,-1081.02"/>
+<polygon fill="black" stroke="black" points="173.5,-1081.02 170,-1071.02 166.5,-1081.02 173.5,-1081.02"/>
+</g>
+<!-- E -->
+<g id="node5" class="node">
+<title>E</title>
+<path fill="none" stroke="black" d="M399.44,-1069.4C399.44,-1069.4 306.56,-1069.4 306.56,-1069.4 300.56,-1069.4 294.56,-1063.4 294.56,-1057.4 294.56,-1057.4 294.56,-1045.4 294.56,-1045.4 294.56,-1039.4 300.56,-1033.4 306.56,-1033.4 306.56,-1033.4 399.44,-1033.4 399.44,-1033.4 405.44,-1033.4 411.44,-1039.4 411.44,-1045.4 411.44,-1045.4 411.44,-1057.4 411.44,-1057.4 411.44,-1063.4 405.44,-1069.4 399.44,-1069.4"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-1048.1" font-family="Arial" font-size="11.00">SoraEngine Network</text>
+</g>
+<!-- A&#45;&gt;E -->
+<g id="edge14" class="edge">
+<title>A-&gt;E</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M239.01,-1160.32C239.01,-1125.04 239.01,-1051 239.01,-1051 239.01,-1051 282.82,-1051 282.82,-1051"/>
+<polygon fill="black" stroke="black" points="282.82,-1054.5 292.82,-1051 282.82,-1047.5 282.82,-1054.5"/>
+<text xml:space="preserve" text-anchor="middle" x="317.71" y="-1112" font-family="Times,serif" font-size="14.00">registers</text>
+</g>
+<!-- C -->
+<g id="node3" class="node">
+<title>C</title>
+<path fill="none" stroke="black" d="M207.87,-960.4C207.87,-960.4 132.13,-960.4 132.13,-960.4 126.13,-960.4 120.13,-954.4 120.13,-948.4 120.13,-948.4 120.13,-936.4 120.13,-936.4 120.13,-930.4 126.13,-924.4 132.13,-924.4 132.13,-924.4 207.87,-924.4 207.87,-924.4 213.87,-924.4 219.87,-930.4 219.87,-936.4 219.87,-936.4 219.87,-948.4 219.87,-948.4 219.87,-954.4 213.87,-960.4 207.87,-960.4"/>
+<text xml:space="preserve" text-anchor="middle" x="170" y="-939.1" font-family="Arial" font-size="11.00">Frame Extraction</text>
+</g>
+<!-- B&#45;&gt;C -->
+<g id="edge2" class="edge">
+<title>B-&gt;C</title>
+<path fill="none" stroke="black" d="M170,-1032.91C170,-1032.91 170,-972.13 170,-972.13"/>
+<polygon fill="black" stroke="black" points="173.5,-972.13 170,-962.13 166.5,-972.13 173.5,-972.13"/>
+</g>
+<!-- D -->
+<g id="node4" class="node">
+<title>D</title>
+<path fill="none" stroke="black" d="M206.96,-851.4C206.96,-851.4 133.04,-851.4 133.04,-851.4 127.04,-851.4 121.04,-845.4 121.04,-839.4 121.04,-839.4 121.04,-827.4 121.04,-827.4 121.04,-821.4 127.04,-815.4 133.04,-815.4 133.04,-815.4 206.96,-815.4 206.96,-815.4 212.96,-815.4 218.96,-821.4 218.96,-827.4 218.96,-827.4 218.96,-839.4 218.96,-839.4 218.96,-845.4 212.96,-851.4 206.96,-851.4"/>
+<text xml:space="preserve" text-anchor="middle" x="170" y="-830.1" font-family="Arial" font-size="11.00">Context Analysis</text>
+</g>
+<!-- C&#45;&gt;D -->
+<g id="edge3" class="edge">
+<title>C-&gt;D</title>
+<path fill="none" stroke="black" d="M170,-923.91C170,-923.91 170,-863.13 170,-863.13"/>
+<polygon fill="black" stroke="black" points="173.5,-863.13 170,-853.13 166.5,-863.13 173.5,-863.13"/>
+</g>
+<!-- O -->
+<g id="node15" class="node">
+<title>O</title>
+<path fill="none" stroke="black" d="M215.83,-522C215.83,-522 124.17,-522 124.17,-522 118.17,-522 112.17,-516 112.17,-510 112.17,-510 112.17,-498 112.17,-498 112.17,-492 118.17,-486 124.17,-486 124.17,-486 215.83,-486 215.83,-486 221.83,-486 227.83,-492 227.83,-498 227.83,-498 227.83,-510 227.83,-510 227.83,-516 221.83,-522 215.83,-522"/>
+<text xml:space="preserve" text-anchor="middle" x="170" y="-500.7" font-family="Arial" font-size="11.00">Local Context Buffer</text>
+</g>
+<!-- D&#45;&gt;O -->
+<g id="edge17" class="edge">
+<title>D-&gt;O</title>
+<path fill="none" stroke="black" d="M170,-815.22C170,-815.22 170,-533.64 170,-533.64"/>
+<polygon fill="black" stroke="black" points="173.5,-533.64 170,-523.64 166.5,-533.64 173.5,-533.64"/>
+</g>
+<!-- F -->
+<g id="node6" class="node">
+<title>F</title>
+<path fill="none" stroke="black" d="M391.19,-960.4C391.19,-960.4 314.81,-960.4 314.81,-960.4 308.81,-960.4 302.81,-954.4 302.81,-948.4 302.81,-948.4 302.81,-936.4 302.81,-936.4 302.81,-930.4 308.81,-924.4 314.81,-924.4 314.81,-924.4 391.19,-924.4 391.19,-924.4 397.19,-924.4 403.19,-930.4 403.19,-936.4 403.19,-936.4 403.19,-948.4 403.19,-948.4 403.19,-954.4 397.19,-960.4 391.19,-960.4"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-939.1" font-family="Arial" font-size="11.00">Provisioning Tool</text>
+</g>
+<!-- E&#45;&gt;F -->
+<g id="edge4" class="edge">
+<title>E-&gt;F</title>
+<path fill="none" stroke="black" d="M353,-1032.91C353,-1032.91 353,-972.13 353,-972.13"/>
+<polygon fill="black" stroke="black" points="356.5,-972.13 353,-962.13 349.5,-972.13 356.5,-972.13"/>
+</g>
+<!-- G -->
+<g id="node7" class="node">
+<title>G</title>
+<path fill="none" stroke="black" d="M398.52,-851.4C398.52,-851.4 307.48,-851.4 307.48,-851.4 301.48,-851.4 295.48,-845.4 295.48,-839.4 295.48,-839.4 295.48,-827.4 295.48,-827.4 295.48,-821.4 301.48,-815.4 307.48,-815.4 307.48,-815.4 398.52,-815.4 398.52,-815.4 404.52,-815.4 410.52,-821.4 410.52,-827.4 410.52,-827.4 410.52,-839.4 410.52,-839.4 410.52,-845.4 404.52,-851.4 398.52,-851.4"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-830.1" font-family="Arial" font-size="11.00">Trainer Node Config</text>
+</g>
+<!-- F&#45;&gt;G -->
+<g id="edge5" class="edge">
+<title>F-&gt;G</title>
+<path fill="none" stroke="black" d="M353,-923.91C353,-923.91 353,-863.13 353,-863.13"/>
+<polygon fill="black" stroke="black" points="356.5,-863.13 353,-853.13 349.5,-863.13 356.5,-863.13"/>
+</g>
+<!-- H -->
+<g id="node8" class="node">
+<title>H</title>
+<path fill="none" stroke="black" d="M395.47,-742.4C395.47,-742.4 310.53,-742.4 310.53,-742.4 304.53,-742.4 298.53,-736.4 298.53,-730.4 298.53,-730.4 298.53,-718.4 298.53,-718.4 298.53,-712.4 304.53,-706.4 310.53,-706.4 310.53,-706.4 395.47,-706.4 395.47,-706.4 401.47,-706.4 407.47,-712.4 407.47,-718.4 407.47,-718.4 407.47,-730.4 407.47,-730.4 407.47,-736.4 401.47,-742.4 395.47,-742.4"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-721.1" font-family="Arial" font-size="11.00">Federated Training</text>
+</g>
+<!-- G&#45;&gt;H -->
+<g id="edge6" class="edge">
+<title>G-&gt;H</title>
+<path fill="none" stroke="black" d="M353,-814.91C353,-814.91 353,-754.13 353,-754.13"/>
+<polygon fill="black" stroke="black" points="356.5,-754.13 353,-744.13 349.5,-754.13 356.5,-754.13"/>
+</g>
+<!-- I -->
+<g id="node9" class="node">
+<title>I</title>
+<path fill="none" stroke="black" d="M395.17,-633.4C395.17,-633.4 310.83,-633.4 310.83,-633.4 304.83,-633.4 298.83,-627.4 298.83,-621.4 298.83,-621.4 298.83,-609.4 298.83,-609.4 298.83,-603.4 304.83,-597.4 310.83,-597.4 310.83,-597.4 395.17,-597.4 395.17,-597.4 401.17,-597.4 407.17,-603.4 407.17,-609.4 407.17,-609.4 407.17,-621.4 407.17,-621.4 407.17,-627.4 401.17,-633.4 395.17,-633.4"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-612.1" font-family="Arial" font-size="11.00">Model Aggregation</text>
+</g>
+<!-- H&#45;&gt;I -->
+<g id="edge7" class="edge">
+<title>H-&gt;I</title>
+<path fill="none" stroke="black" d="M353,-705.91C353,-705.91 353,-645.13 353,-645.13"/>
+<polygon fill="black" stroke="black" points="356.5,-645.13 353,-635.13 349.5,-645.13 356.5,-645.13"/>
+</g>
+<!-- J -->
+<g id="node10" class="node">
+<title>J</title>
+<path fill="none" stroke="black" d="M384.16,-522C384.16,-522 321.84,-522 321.84,-522 315.84,-522 309.84,-516 309.84,-510 309.84,-510 309.84,-498 309.84,-498 309.84,-492 315.84,-486 321.84,-486 321.84,-486 384.16,-486 384.16,-486 390.16,-486 396.16,-492 396.16,-498 396.16,-498 396.16,-510 396.16,-510 396.16,-516 390.16,-522 384.16,-522"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-500.7" font-family="Arial" font-size="11.00">Merged Model</text>
+</g>
+<!-- I&#45;&gt;J -->
+<g id="edge8" class="edge">
+<title>I-&gt;J</title>
+<path fill="none" stroke="black" d="M353,-597C353,-597 353,-533.94 353,-533.94"/>
+<polygon fill="black" stroke="black" points="356.5,-533.94 353,-523.94 349.5,-533.94 356.5,-533.94"/>
+</g>
+<!-- K -->
+<g id="node11" class="node">
+<title>K</title>
+<path fill="none" stroke="black" d="M415.19,-394.8C415.19,-394.8 316.81,-394.8 316.81,-394.8 310.81,-394.8 304.81,-388.8 304.81,-382.8 304.81,-382.8 304.81,-370.8 304.81,-370.8 304.81,-364.8 310.81,-358.8 316.81,-358.8 316.81,-358.8 415.19,-358.8 415.19,-358.8 421.19,-358.8 427.19,-364.8 427.19,-370.8 427.19,-370.8 427.19,-382.8 427.19,-382.8 427.19,-388.8 421.19,-394.8 415.19,-394.8"/>
+<text xml:space="preserve" text-anchor="middle" x="366" y="-373.5" font-family="Arial" font-size="11.00">LFM2-VL Base Model</text>
+</g>
+<!-- J&#45;&gt;K -->
+<g id="edge15" class="edge">
+<title>J-&gt;K</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M353,-485.5C353,-485.5 353,-406.42 353,-406.42"/>
+<polygon fill="black" stroke="black" points="356.5,-406.42 353,-396.42 349.5,-406.42 356.5,-406.42"/>
+<text xml:space="preserve" text-anchor="middle" x="393.02" y="-437.4" font-family="Times,serif" font-size="14.00">feeds model</text>
+</g>
+<!-- P -->
+<g id="node16" class="node">
+<title>P</title>
+<path fill="none" stroke="black" d="M234.2,-394.8C234.2,-394.8 113.8,-394.8 113.8,-394.8 107.8,-394.8 101.8,-388.8 101.8,-382.8 101.8,-382.8 101.8,-370.8 101.8,-370.8 101.8,-364.8 107.8,-358.8 113.8,-358.8 113.8,-358.8 234.2,-358.8 234.2,-358.8 240.2,-358.8 246.2,-364.8 246.2,-370.8 246.2,-370.8 246.2,-382.8 246.2,-382.8 246.2,-388.8 240.2,-394.8 234.2,-394.8"/>
+<text xml:space="preserve" text-anchor="middle" x="174" y="-373.5" font-family="Arial" font-size="11.00">Context-Aware Captioning</text>
+</g>
+<!-- J&#45;&gt;P -->
+<g id="edge18" class="edge">
+<title>J-&gt;P</title>
+<path fill="none" stroke="black" d="M309.63,-498C278.36,-498 241.65,-498 241.65,-498 241.65,-498 241.65,-406.72 241.65,-406.72"/>
+<polygon fill="black" stroke="black" points="245.15,-406.72 241.65,-396.72 238.15,-406.72 245.15,-406.72"/>
+</g>
+<!-- L -->
+<g id="node12" class="node">
+<title>L</title>
+<path fill="none" stroke="black" d="M459.78,-270C459.78,-270 330.22,-270 330.22,-270 324.22,-270 318.22,-264 318.22,-258 318.22,-258 318.22,-246 318.22,-246 318.22,-240 324.22,-234 330.22,-234 330.22,-234 459.78,-234 459.78,-234 465.78,-234 471.78,-240 471.78,-246 471.78,-246 471.78,-258 471.78,-258 471.78,-264 465.78,-270 459.78,-270"/>
+<text xml:space="preserve" text-anchor="middle" x="395" y="-248.7" font-family="Arial" font-size="11.00">Continuous-time Processing</text>
+</g>
+<!-- K&#45;&gt;L -->
+<g id="edge9" class="edge">
+<title>K-&gt;L</title>
+<path fill="none" stroke="black" d="M372.7,-358.39C372.7,-358.39 372.7,-282 372.7,-282"/>
+<polygon fill="black" stroke="black" points="376.2,-282 372.7,-272 369.2,-282 376.2,-282"/>
+</g>
+<!-- M -->
+<g id="node13" class="node">
+<title>M</title>
+<path fill="none" stroke="black" d="M445.53,-161C445.53,-161 332.47,-161 332.47,-161 326.47,-161 320.47,-155 320.47,-149 320.47,-149 320.47,-137 320.47,-137 320.47,-131 326.47,-125 332.47,-125 332.47,-125 445.53,-125 445.53,-125 451.53,-125 457.53,-131 457.53,-137 457.53,-137 457.53,-149 457.53,-149 457.53,-155 451.53,-161 445.53,-161"/>
+<text xml:space="preserve" text-anchor="middle" x="389" y="-139.7" font-family="Arial" font-size="11.00">Video Context Extraction</text>
+</g>
+<!-- L&#45;&gt;M -->
+<g id="edge10" class="edge">
+<title>L-&gt;M</title>
+<path fill="none" stroke="black" d="M389,-233.51C389,-233.51 389,-172.73 389,-172.73"/>
+<polygon fill="black" stroke="black" points="392.5,-172.73 389,-162.73 385.5,-172.73 392.5,-172.73"/>
+</g>
+<!-- N -->
+<g id="node14" class="node">
+<title>N</title>
+<path fill="none" stroke="black" d="M466.02,-52C466.02,-52 311.98,-52 311.98,-52 305.98,-52 299.98,-46 299.98,-40 299.98,-40 299.98,-28 299.98,-28 299.98,-22 305.98,-16 311.98,-16 311.98,-16 466.02,-16 466.02,-16 472.02,-16 478.02,-22 478.02,-28 478.02,-28 478.02,-40 478.02,-40 478.02,-46 472.02,-52 466.02,-52"/>
+<text xml:space="preserve" text-anchor="middle" x="389" y="-30.7" font-family="Arial" font-size="11.00">Personalized Caption Generation</text>
+</g>
+<!-- M&#45;&gt;N -->
+<g id="edge11" class="edge">
+<title>M-&gt;N</title>
+<path fill="none" stroke="black" d="M389,-124.51C389,-124.51 389,-63.73 389,-63.73"/>
+<polygon fill="black" stroke="black" points="392.5,-63.73 389,-53.73 385.5,-63.73 392.5,-63.73"/>
+</g>
+<!-- O&#45;&gt;M -->
+<g id="edge16" class="edge">
+<title>O-&gt;M</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M228.11,-510C253.42,-510 277.41,-510 277.41,-510 277.41,-510 277.41,-143 277.41,-143 277.41,-143 308.72,-143 308.72,-143"/>
+<polygon fill="black" stroke="black" points="308.72,-146.5 318.72,-143 308.72,-139.5 308.72,-146.5"/>
+<text xml:space="preserve" text-anchor="middle" x="20.6" y="-310.2" font-family="Times,serif" font-size="14.00">context</text>
+</g>
+<!-- O&#45;&gt;P -->
+<g id="edge12" class="edge">
+<title>O-&gt;P</title>
+<path fill="none" stroke="black" d="M170,-485.5C170,-485.5 170,-406.42 170,-406.42"/>
+<polygon fill="black" stroke="black" points="173.5,-406.42 170,-396.42 166.5,-406.42 173.5,-406.42"/>
+</g>
+<!-- Q -->
+<g id="node17" class="node">
+<title>Q</title>
+<path fill="none" stroke="black" d="M248.26,-270C248.26,-270 99.74,-270 99.74,-270 93.74,-270 87.74,-264 87.74,-258 87.74,-258 87.74,-246 87.74,-246 87.74,-240 93.74,-234 99.74,-234 99.74,-234 248.26,-234 248.26,-234 254.26,-234 260.26,-240 260.26,-246 260.26,-246 260.26,-258 260.26,-258 260.26,-264 254.26,-270 248.26,-270"/>
+<text xml:space="preserve" text-anchor="middle" x="174" y="-248.7" font-family="Arial" font-size="11.00">Personalized Instagram Caption</text>
+</g>
+<!-- P&#45;&gt;Q -->
+<g id="edge13" class="edge">
+<title>P-&gt;Q</title>
+<path fill="none" stroke="black" d="M174,-358.39C174,-358.39 174,-282 174,-282"/>
+<polygon fill="black" stroke="black" points="177.5,-282 174,-272 170.5,-282 177.5,-282"/>
+</g>
+</g>
+</svg>
