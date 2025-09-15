@@ -25,13 +25,13 @@ This project addresses the critical need for **privacy-preserving AI** in social
 
 ---
 
-## 🔄 **Federated Learning Lifecycle**
+## 🔄 **System Training & Inference Lifecycle**
 
 ```mermaid
 sequenceDiagram
     participant U as User/Client
-    participant S as SoraEngine Network
-    participant P as Provisioning Tool
+    participant S as SoraEngine Network(Federated Learning Engine)
+    participant P as Provisioning Tool(Communication Configuration)
     participant T as Trainer Node
     participant A as Aggregator
     participant M as Merged Model
@@ -278,13 +278,11 @@ graph LR
 
 ## 📊 **Performance Metrics**
 
-### **Federated Learning Performance**
-| Metric | Standard Approach | Optimized Approach | Improvement |
-|--------|------------------|-------------------|-------------|
-| Job Size | ~6GB | ~1MB | 99.98% reduction |
-| Submission Time | 5-10 min | 10-30 sec | 90%+ faster |
-| Bandwidth Usage | High | Low | 95%+ reduction |
-| Deployment Time | Slow | Fast | 80%+ faster |
+### Benchmark Model Training for the task.
+
+![Benchmark Statistics](stats/benchmarkStat.jpeg)
+
+*Performance comparison between base LFM2-VL-450M model and our federated learning trained model on Instagram caption generation tasks. The trained model shows significant improvements in caption quality, relevance, and personalization metrics.*
 
 ### **Real-time Processing Performance**
 - **Frame Processing**: 0.5-1.0 seconds per frame
@@ -293,8 +291,8 @@ graph LR
 - **Total Processing**: 2.0-3.5 seconds per caption
 
 ### **Model Performance**
-- **LFM2-VL-1.6B**: 2× faster inference speed on GPUs
-- **Memory Efficient**: Only 1.6B parameters
+- **LFM2-VL-450M**: faster inference speed on GPUs
+- **Memory Efficient**: Only 450m parameters
 - **Native Resolution**: Up to 512×512 pixels
 - **Continuous Processing**: Optimized for real-time applications
 
