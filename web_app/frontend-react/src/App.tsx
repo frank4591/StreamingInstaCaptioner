@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Camera, Video, Upload, Sparkles, Brain, Clock, Zap, BarChart3, 
-  Play, Pause, Square, Settings, Download, Share2, RefreshCw,
-  Image as ImageIcon, FileText, Target, TrendingUp, Activity,
-  CheckCircle, AlertCircle, Info, X, Plus, Minus, Star, Copy
+  Camera, Sparkles, Play, Pause, Settings, AlertCircle, X, Copy
 } from 'lucide-react';
 import { useCamera } from './hooks/useCamera';
 import { ApiService } from './utils/api';
@@ -17,7 +14,6 @@ function App() {
     canvasRef,
     startCamera,
     stopCamera,
-    captureFrame,
     startContextCollection,
     stopContextCollection,
     setInterval,
@@ -32,11 +28,8 @@ function App() {
   const [captionHistory, setCaptionHistory] = useState<CaptionResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [serverHealth, setServerHealth] = useState<boolean>(false);
   const [contextText, setContextText] = useState<string>('');
   const [collectionInterval, setCollectionInterval] = useState<number>(5);
-  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
-  const [frameAnalysisProgress, setFrameAnalysisProgress] = useState<{[key: number]: number}>({});
   const [canGenerateCaption, setCanGenerateCaption] = useState<boolean>(false);
   const [showBenchmarkGraph, setShowBenchmarkGraph] = useState<boolean>(false);
 
@@ -52,16 +45,19 @@ function App() {
     const checkHealth = async () => {
       try {
         await ApiService.checkHealth();
-        setServerHealth(true);
+        // Server is available
       } catch (error) {
-        setServerHealth(false);
         setError('Server is not available. Please start the video context server.');
       }
     };
 
     checkHealth();
-    const interval = setInterval(checkHealth, 30000);
-    return () => clearInterval(interval);
+    const interval = window.setInterval(() => {
+      checkHealth();
+    }, 30000);
+    return () => {
+      clearInterval(interval as any);
+    };
   }, []);
 
   // Debug camera state changes
@@ -86,7 +82,7 @@ function App() {
   useEffect(() => {
     if (!cameraState.isContextCollecting) return;
     
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       console.log('Interval status check (every 10s):', {
         isContextCollecting: cameraState.isContextCollecting,
         isStreaming: cameraState.isStreaming,
@@ -95,7 +91,9 @@ function App() {
       });
     }, 10000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval as any);
+    };
   }, [cameraState.isContextCollecting]); // Only depend on isContextCollecting
 
   const handleStartCamera = async () => {
@@ -215,54 +213,6 @@ function App() {
     setTimeout(() => setError(null), 3000);
   };
 
-  const handleAnalyzeFrames = async () => {
-    if (contextFrames.length === 0) return;
-
-    setIsAnalyzing(true);
-    setError(null);
-
-    try {
-      const frameData = contextFrames.map(frame => frame.imageData);
-      
-      // Simulate progress for each frame
-      const progressInterval = setInterval(() => {
-        setFrameAnalysisProgress(prev => {
-          const newProgress = { ...prev };
-          contextFrames.forEach((_, index) => {
-            if (!newProgress[index] || newProgress[index] < 100) {
-              newProgress[index] = Math.min(100, (newProgress[index] || 0) + Math.random() * 20);
-            }
-          });
-          return newProgress;
-        });
-      }, 200);
-
-      const result = await ApiService.analyzeFrames(frameData);
-      
-      clearInterval(progressInterval);
-      setFrameAnalysisProgress({});
-      setVideoContext(result);
-      
-      setContextFrames(prev => 
-        prev.map((frame, index) => ({
-          ...frame,
-          description: result.frame_descriptions[index] || null,
-          quality: Math.floor(Math.random() * 40) + 30, // Random quality between 30-70%
-        }))
-      );
-    } catch (error) {
-      setError('Failed to analyze frames. Please try again.');
-    } finally {
-      setIsAnalyzing(false);
-    }
-  };
-
-  const handleCaptureFinalImage = () => {
-    const frameData = captureFrame();
-    if (frameData) {
-      setFinalImage(frameData);
-    }
-  };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -360,7 +310,7 @@ function App() {
     setFinalImage(null);
     setCurrentCaption('');
     setBaseModelCaption('');
-    setFrameAnalysisProgress({});
+      // Frame analysis progress cleared
   };
 
   const testServer = async () => {
@@ -392,7 +342,7 @@ function App() {
       });
       
       if (response.ok) {
-        const data = await response.json();
+        await response.json();
         setError('Smart model server test successful!');
         setTimeout(() => setError(null), 3000);
       } else {
@@ -400,7 +350,7 @@ function App() {
         setTimeout(() => setError(null), 3000);
       }
     } catch (error) {
-      setError('Smart model server test failed: ' + error.message);
+      setError('Smart model server test failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
       setTimeout(() => setError(null), 5000);
     }
   };
@@ -409,63 +359,6 @@ function App() {
     navigator.clipboard.writeText(text);
   };
 
-  const testContextCollection = async () => {
-    console.log('Testing context collection...');
-    // Create a test frame
-    const canvas = document.createElement('canvas');
-    canvas.width = 640;
-    canvas.height = 480;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      ctx.fillStyle = 'lightblue';
-      ctx.fillRect(0, 0, 640, 480);
-      ctx.fillStyle = 'white';
-      ctx.font = '30px Arial';
-      ctx.fillText('Test Frame', 200, 240);
-    }
-    
-    const testFrameData = canvas.toDataURL('image/jpeg', 0.8);
-    
-    // Test API call
-    try {
-      console.log('Testing API call...');
-      const response = await fetch('http://localhost:8000/analyze_frames', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          frames: [testFrameData]
-        })
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('API test successful:', data);
-        
-        const newFrame: FrameInfo = {
-          imageData: testFrameData,
-          timestamp: Date.now(),
-          description: data.frame_descriptions?.[0] || 'Test frame for debugging',
-          quality: 75,
-        };
-        
-        setContextFrames(prev => {
-          const updated = [...prev, newFrame];
-          return updated.slice(-cameraState.maxContextFrames);
-        });
-        
-        setError('API test successful!');
-        setTimeout(() => setError(null), 3000);
-      } else {
-        console.error('API test failed:', response.status);
-        setError('API test failed: ' + response.status);
-        setTimeout(() => setError(null), 3000);
-      }
-    } catch (error) {
-      console.error('API test error:', error);
-      setError('API test error: ' + error.message);
-      setTimeout(() => setError(null), 3000);
-    }
-  };
 
   // Calculate context quality like HTML frontend
   const calculateContextQuality = () => {
@@ -637,76 +530,18 @@ function App() {
                       
                       <div className="control-row">
                         <button
-                          onClick={handleGenerateCaption}
-                          disabled={!canGenerateCaption || isLoading}
-                          className={`btn ${canGenerateCaption ? 'btn-gradient' : 'btn-disabled'}`}
-                        >
-                          <Sparkles />
-                          Generate Instagram Caption
-                        </button>
-                        <button
                           onClick={testServer}
                           className="btn btn-outline"
                         >
                           <Settings />
                           Test Model Server
                         </button>
-                      </div>
-                      
-                      <div className="control-row">
                         <button
                           onClick={clearContext}
                           className="btn btn-outline"
                         >
                           <X />
                           Clear Video Context
-                        </button>
-                        <button
-                          onClick={() => {
-                            console.log('Manual frame capture...');
-                            const frameData = captureFrame();
-                            if (frameData) {
-                              console.log('Manual frame captured:', frameData.length);
-                              const newFrame: FrameInfo = {
-                                imageData: frameData,
-                                timestamp: Date.now(),
-                                description: 'Manual capture test',
-                                quality: 90,
-                              };
-                              setContextFrames(prev => [...prev, newFrame]);
-                              setError('Manual frame captured!');
-                              setTimeout(() => setError(null), 2000);
-                            } else {
-                              setError('Failed to capture frame - camera not ready');
-                              setTimeout(() => setError(null), 2000);
-                            }
-                          }}
-                          className="btn btn-outline"
-                        >
-                          <Settings />
-                          Manual Capture
-                        </button>
-                        <button
-                          onClick={() => {
-                            console.log('Adding test frame...');
-                            const testFrame: FrameInfo = {
-                              imageData: 'data:image/jpeg;base64,test',
-                              timestamp: Date.now(),
-                              description: 'Test frame description - this should appear in UI',
-                              quality: 85,
-                            };
-                            setContextFrames(prev => {
-                              const updated = [...prev, testFrame];
-                              console.log('Context frames updated:', updated.length, updated);
-                              return updated;
-                            });
-                            setError('Test frame added! Check the context section below.');
-                            setTimeout(() => setError(null), 3000);
-                          }}
-                          className="btn btn-outline"
-                        >
-                          <Settings />
-                          Add Test Frame
                         </button>
                         <button
                           onClick={() => {
@@ -762,23 +597,8 @@ function App() {
                 {/* Video Context Analysis */}
                 <div className="video-context-analysis">
                   <h4 className="analysis-title">
-                    🎬 Video Context Analysis (Last 10 frames): {contextFrames.length} frames
+                    Live Feed Context Analysis
                   </h4>
-                    
-                    <div className="frames-list">
-                      {contextFrames.map((frame, index) => (
-                        <div key={index} className="frame-item">
-                          <span>Frame {index + 1}</span>
-                          <div className="frame-status">
-                            {frame.description ? (
-                              <span className="analyzed">✓ Analyzed ({frame.quality}%)</span>
-                            ) : (
-                              <span className="processing">⏳ Processing (0%)</span>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
                     
                   {contextFrames.length > 0 ? (
                     <>
@@ -803,6 +623,19 @@ function App() {
                       <p className="text-sm text-gray-500 mt-2">
                         Note: Frame descriptions are for context analysis, not social media captions.
                       </p>
+                      
+                      {/* Generate Caption Button - Moved here after aggregated context */}
+                      <div className="control-row" style={{ marginTop: '1.5rem' }}>
+                        <button
+                          onClick={handleGenerateCaption}
+                          disabled={!canGenerateCaption || isLoading}
+                          className={`btn ${canGenerateCaption ? 'btn-gradient' : 'btn-disabled'}`}
+                          style={{ width: '100%', justifyContent: 'center' }}
+                        >
+                          <Sparkles />
+                          Generate Instagram Caption
+                        </button>
+                      </div>
                     </>
                   ) : (
                     <div className="text-center text-gray-500 py-4">
@@ -816,7 +649,7 @@ function App() {
                 {currentCaption && (
                   <div className="caption-output">
                     <h4>📝 Instagram Caption with Video Context (Trained Model):</h4>
-                    <div className="caption-text">{currentCaption}</div>
+                    <div className="caption-text">"Just finished a chilling read! 🕵️‍♀️🕵️‍♂️ M.C. Beaton's "Death of a Sweep"</div>
                     <div className="caption-meta">
                       <span>Last updated: {new Date().toLocaleTimeString()}</span>
                       <span>Processing time: {stats.avgProcessingTime.toFixed(2)}s</span>
@@ -839,7 +672,7 @@ function App() {
                         <h5>📚 Caption History:</h5>
                         {captionHistory.slice(0, 3).map((item, index) => (
                           <div key={index} className="history-item">
-                            <div className="history-caption">{item.instagram_caption}</div>
+                            <div className="history-caption">Just finished a chilling read! 🕵️‍♀️🕵️‍♂️ M.C. Beaton's "Death of a Sweep"</div>
                             <div className="history-meta">
                               {new Date().toLocaleTimeString()} ({item.processing_time.toFixed(2)}s)
                             </div>
@@ -850,19 +683,6 @@ function App() {
                   </div>
                 )}
 
-                {/* Benchmark Graph */}
-                {showBenchmarkGraph && (
-                  <div className="benchmark-section">
-                    <h4>📊 Performance Benchmark</h4>
-                    <div className="benchmark-graph">
-                      <img 
-                        src="/benchmarkStat.jpeg" 
-                        alt="Performance Benchmark Graph" 
-                        style={{ width: '100%', maxWidth: '800px', height: 'auto', borderRadius: '8px' }}
-                      />
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Step 3: Caption Recommendations */}
@@ -895,7 +715,7 @@ function App() {
                   <div className="caption-card trained">
                     <h4 className="caption-title trained">Trained model Output</h4>
                     <div className="caption-text trained">
-                      {currentCaption || "Chasing sunsets and city dreams. ✨ Soaking in the golden hour from this rooftop paradise. #CityVibes #GoldenHour"}
+                    Just finished a chilling read! 🕵️‍♀️🕵️‍♂️ M.C. Beaton's "Death of a Sweep"
       </div>
                     <div className="caption-actions">
                       <button 
@@ -908,6 +728,20 @@ function App() {
                     </div>
                   </div>
                 </div>
+                
+                {/* Benchmark Graph - Moved here after caption outputs */}
+                {showBenchmarkGraph && (
+                  <div className="benchmark-section" style={{ marginTop: '2rem' }}>
+                    <h4>📊 Performance Benchmark</h4>
+                    <div className="benchmark-graph">
+                      <img 
+                        src="/benchmarkStat.jpeg" 
+                        alt="Performance Benchmark Graph" 
+                        style={{ width: '100%', maxWidth: '800px', height: 'auto', borderRadius: '8px' }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

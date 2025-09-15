@@ -147,8 +147,8 @@ def load_video_context_components():
     try:
         # Model configuration:
         # Base model: LFM2-VL-450M (used for base model captions)
-        # Trained model: LFM2-VL-1.6B (used for context-aware inference)
-        model_path = "/home/frank/LiquidTraining/LFM2-VL-1.6B"
+        # Trained model: @final_merged_model/ (used for context-aware inference)
+        model_path = "/home/frank/BrandInfluencerDatasetTraining/final_merged_model"
         
         logger.info("Initializing VideoContextImageCaptioning components...")
         logger.info(f"Using trained model: {model_path}")
