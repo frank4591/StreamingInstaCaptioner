@@ -3,6 +3,7 @@
 
 A comprehensive system that generates personalized Instagram captions while preserving user privacy through federated learning, leveraging Liquid AI's continuous-time processing capabilities, and integrating real-time environmental context.
 
+[![Caption-Aura Demo](https://img.youtube.com/vi/EWZKKZep9Sk/0.jpg)](https://youtu.be/EWZKKZep9Sk)
 ---
 
 ## 🎯 **Project Overview**
